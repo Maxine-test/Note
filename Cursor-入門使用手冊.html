@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor 入門使用手冊</title>
+    <style>
+        :root {
+            --bg: #d6d7db;
+            --panel: #efeff2;
+            --text: #1c1c20;
+            --accent: #5c4a0f;
+            --muted: #45454d;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; line-height: 1.7; }
+        .wrap { max-width: 720px; margin: 0 auto; }
+        h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+        h2 { color: var(--accent); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+        h3 { color: var(--text); font-size: 1rem; margin-top: 1.25rem; margin-bottom: 0.4rem; }
+        p { color: var(--muted); margin: 0.5rem 0; font-size: 0.95rem; }
+        ul, ol { color: var(--muted); margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.95rem; }
+        li { margin: 0.35rem 0; }
+        .panel { background: var(--panel); border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; border: 1px solid rgba(0,0,0,0.08); }
+        kbd { background: rgba(0,0,0,0.06); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: #222; }
+        .kbd-row { margin: 0.4rem 0; color: var(--muted); font-size: 0.9rem; }
+        a { color: #5a4810; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.75rem 0; }
+        th, td { border: 1px solid rgba(0,0,0,0.12); padding: 0.5rem 0.75rem; text-align: left; }
+        th { color: var(--accent); background: rgba(0,0,0,0.05); }
+        td { color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Cursor 入門使用手冊</h1>
+        <p class="subtitle">以 VS Code 為基礎的 AI 程式編輯器 · 用自然語言寫程式、除錯、重構</p>
+
+        <h2>一、什麼是 Cursor？</h2>
+        <p>Cursor 是以 VS Code 為基礎的程式編輯器，內建 AI 助理。你可以用自然語言（Prompt）描述需求，AI 會幫你產生或修改程式碼、解釋程式、除錯、重構。支援多種模型（Claude、Gemini、GPT 等），並可透過 MCP 連接資料庫、API、本機腳本等外部工具。</p>
+
+        <h2>二、系統需求</h2>
+        <ul>
+            <li><strong>作業系統</strong>：Windows 10/11 (64 位元)、macOS 10.15+、Linux（如 Ubuntu 18.04+）</li>
+            <li><strong>硬體</strong>：建議 4 核以上 CPU、8GB 以上記憶體（大型專案建議 16GB+）、至少 2GB 可用磁碟空間</li>
+            <li><strong>網路</strong>：需連線以使用 AI 功能</li>
+        </ul>
+
+        <h2>三、下載與安裝</h2>
+        <ol>
+            <li>前往官網 <a href="https://cursor.sh" target="_blank" rel="noopener">cursor.sh</a> 或 <a href="https://www.cursor.com" target="_blank" rel="noopener">cursor.com</a>。</li>
+            <li><strong>Windows</strong>：下載 <code>.exe</code>，雙擊執行安裝。</li>
+            <li><strong>macOS</strong>：下載 <code>.dmg</code>，將 Cursor 拖到「應用程式」資料夾。</li>
+            <li><strong>Linux</strong>：下載 <code>.deb</code> 或 <code>.rpm</code> / AppImage，依發行版安裝（例如 <code>sudo dpkg -i cursor-*.deb</code>）。</li>
+        </ol>
+
+        <h2>四、首次啟動與登入</h2>
+        <ol>
+            <li>開啟 Cursor，若有更新可先完成。</li>
+            <li>使用 <strong>GitHub</strong>、<strong>Google</strong> 或 <strong>電子郵件</strong> 註冊／登入帳號。</li>
+            <li>依畫面選擇方案（有免費額度，進階功能可能需訂閱）。</li>
+            <li>可選擇預設 AI 模型（例如 Claude、GPT-4），之後可在設定中更換。</li>
+        </ol>
+
+        <h2>五、介面簡介</h2>
+        <p>介面與 VS Code 類似，主要區塊：</p>
+        <ul>
+            <li><strong>左側</strong>：檔案總管、搜尋、延伸模組等。</li>
+            <li><strong>中間</strong>：編輯區，可開多個分頁。</li>
+            <li><strong>右側或下方</strong>：AI 聊天面板（Chat），與 AI 對話、下指令。</li>
+            <li><strong>命令面板</strong>：<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>（Windows/Linux）或 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>（Mac）可叫出所有指令。</li>
+        </ul>
+
+        <h2>六、基本操作</h2>
+        <h3>6.1 開啟專案</h3>
+        <p>選單 <strong>檔案 → 開啟資料夾</strong>（或 <kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>O</kbd>），選擇你的專案資料夾。AI 會依專案內容提供更準確的建議。</p>
+
+        <h3>6.2 開啟 AI 聊天（Chat）</h3>
+        <p>按 <kbd>Ctrl</kbd>+<kbd>L</kbd>（Mac：<kbd>Cmd</kbd>+<kbd>L</kbd>）開啟 AI 聊天面板。在輸入框打字描述需求，例如：</p>
+        <ul>
+            <li>「幫我寫一個讀取 CSV 的 Python 函式」</li>
+            <li>「解釋這段程式在做什麼」</li>
+            <li>「幫我重構這個函式，讓它更簡短」</li>
+        </ul>
+        <p>AI 會回覆並可依你同意將程式碼插入或套用到檔案。</p>
+
+        <h3>6.3 行內編輯／生成（Cmd+K）</h3>
+        <p>在編輯器中選取一段程式碼（或把游標放在要修改處），按 <kbd>Ctrl</kbd>+<kbd>K</kbd>（Mac：<kbd>Cmd</kbd>+<kbd>K</kbd>），輸入簡短指令（例如「加錯誤處理」「改成 async」），AI 會直接在那段程式碼上修改或生成。</p>
+
+        <h3>6.4 使用 @ 引用上下文</h3>
+        <p>在 Chat 輸入框輸入 <kbd>@</kbd> 可帶入上下文，例如：</p>
+        <ul>
+            <li><code>@檔名</code>：引用某個檔案內容。</li>
+            <li><code>@Codebase</code>：讓 AI 搜尋整個專案。</li>
+            <li><code>@Web</code>：允許 AI 查網路（若已啟用）。</li>
+            <li><code>@Docs</code>：引用文件。</li>
+        </ul>
+        <p>有助於 AI 更精準理解你的專案與需求。</p>
+
+        <h2>七、常用快捷鍵</h2>
+        <div class="panel">
+            <div class="kbd-row"><kbd>Ctrl</kbd>+<kbd>L</kbd>（Mac <kbd>Cmd</kbd>+<kbd>L</kbd>）→ 開啟 AI 聊天面板</div>
+            <div class="kbd-row"><kbd>Ctrl</kbd>+<kbd>K</kbd>（Mac <kbd>Cmd</kbd>+<kbd>K</kbd>）→ 行內 AI 編輯／生成</div>
+            <div class="kbd-row"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>（Mac <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>）→ 命令面板</div>
+            <div class="kbd-row"><kbd>Alt</kbd>+<kbd>I</kbd> → 插入 AI 生成的程式碼（依版本可能不同）</div>
+            <div class="kbd-row"><kbd>Alt</kbd>+<kbd>]</kbd> → 生成註解；<kbd>Alt</kbd>+<kbd>[</kbd> → 解釋程式碼（依版本可能不同）</div>
+        </div>
+
+        <h2>八、選擇 AI 模型與 MCP</h2>
+        <p>在設定或 Chat 面板中可切換模型（如 Claude、GPT-4、Gemini 等），依需求與額度選擇。若需連接資料庫、API 或本機腳本，可安裝並設定 <strong>MCP（Model Context Protocol）</strong> 伺服器，讓 AI 在對話中直接使用這些工具。</p>
+
+        <h2>九、注意事項</h2>
+        <ul>
+            <li><strong>隱私與資安</strong>：程式碼可能傳送至 AI 服務端，敏感專案請留意公司政策與 Cursor 隱私說明。</li>
+            <li><strong>不能直接產圖</strong>：Cursor 無法像 Antigravity 那樣內建產生圖片，需透過你寫的程式或外部 API 產圖。</li>
+        </ul>
+
+        <h2>十、延伸學習</h2>
+        <p>可至 <a href="https://docs.cursor.com" target="_blank" rel="noopener">Cursor 官方文件</a> 查看最新功能、快捷鍵與進階設定。本說明與 <a href="ai-tools-diagram.html">AI 工具名詞與關聯圖</a> 放在同一 Flow 資料夾，可搭配閱讀。</p>
+    </div>
+</body>
+</html>

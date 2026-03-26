@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 公開網頁 × Google Sheet 當資料庫 — 操作筆記</title>
+    <style>
+        :root {
+            --bg: #d6d7db;
+            --panel: #efeff2;
+            --text: #1c1c20;
+            --accent: #5c4a0f;
+            --muted: #45454d;
+            --warn: #b45309;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; line-height: 1.7; }
+        .wrap { max-width: 760px; margin: 0 auto; }
+        h1 { color: var(--accent); font-size: 1.45rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+        h2 { color: var(--accent); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.35rem; }
+        h3 { color: var(--text); font-size: 1rem; margin-top: 1.25rem; margin-bottom: 0.4rem; }
+        p { color: var(--muted); margin: 0.5rem 0; font-size: 0.95rem; }
+        ul, ol { color: var(--muted); margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.95rem; }
+        li { margin: 0.35rem 0; }
+        .panel { background: var(--panel); border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; border: 1px solid rgba(0,0,0,0.08); }
+        .panel.warn { border-color: rgba(180, 83, 9, 0.45); background: #f8f4ef; }
+        .panel.warn h3 { color: var(--warn); margin-top: 0; }
+        code { background: rgba(0,0,0,0.06); padding: 0.12rem 0.35rem; border-radius: 4px; font-size: 0.88em; color: #222; }
+        pre { background: #e4e5ea; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; color: #2a2a30; margin: 0.75rem 0; }
+        a { color: #5a4810; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.75rem 0; }
+        th, td { border: 1px solid rgba(0,0,0,0.12); padding: 0.5rem 0.75rem; text-align: left; }
+        th { color: var(--accent); background: rgba(0,0,0,0.05); }
+        td { color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>GitHub 公開網頁 × Google Sheet 當資料庫</h1>
+        <p class="subtitle">操作筆記 · 給靜態 HTML（如網球紀錄）用 GitHub Pages 發佈，並用 Apps Script 讀寫試算表</p>
+
+        <h2>一、把做好的 HTML 用 GitHub 公開給任何人讀取</h2>
+        <p>目標：讓任何人用瀏覽器開網址就能看到你的頁面，不需登入 GitHub。</p>
+
+        <h3>1.1 準備 GitHub 帳號與新儲存庫</h3>
+        <ol>
+            <li>到 <a href="https://github.com" target="_blank" rel="noopener">github.com</a> 註冊或登入。</li>
+            <li>右上角 <strong>＋</strong> → <strong>New repository</strong>。</li>
+            <li>取專案名稱（例如 <code>tennis-tracker</code>），選 <strong>Public</strong>（公開），建立儲存庫。</li>
+        </ol>
+
+        <h3>1.2 上傳 HTML 檔案</h3>
+        <p>擇一即可：</p>
+        <ul>
+            <li><strong>網頁上傳</strong>：在 repo 頁面 <strong>Add file → Upload files</strong>，拖入 <code>.html</code>，填 commit 說明後 <strong>Commit changes</strong>。</li>
+            <li><strong>本機 Git</strong>：在專案資料夾執行 <code>git init</code>、<code>git remote add origin …</code>、<code>git add .</code>、<code>git commit</code>、<code>git push -u origin main</code>。</li>
+        </ul>
+
+        <h3>1.3 開啟 GitHub Pages 並選對資料夾（重要）</h3>
+        <ol>
+            <li>進入該 repo → <strong>Settings</strong> → 左側 <strong>Pages</strong>（在「Code and automation」底下）。</li>
+            <li><strong>Build and deployment</strong> → Source 選 <strong>Deploy from a branch</strong>。</li>
+            <li><strong>Branch</strong> 選 <code>main</code>（或你實際使用的預設分支）。</li>
+            <li><strong>Folder</strong> 二選一，必須和「檔案實際位置」一致：
+                <table>
+                    <thead><tr><th>Folder 設定</th><th>你的 HTML 要放在 repo 哪裡</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>/ (root)</code></td><td>與 <code>README</code> 同層，在<strong>根目錄</strong></td></tr>
+                        <tr><td><code>/docs</code></td><td>必須有 <strong>docs</strong> 資料夾，HTML 放在 <code>docs/</code> 裡</td></tr>
+                    </tbody>
+                </table>
+            </li>
+            <li>按 <strong>Save</strong>。若選了 <code>/docs</code> 但 repo 沒有 <code>docs</code> 資料夾，<strong>Actions</strong> 裡 Jekyll 建置會失敗（commit 旁出現紅色 ✕）。</li>
+        </ol>
+
+        <h3>1.4 等建置完成並取得網址</h3>
+        <ol>
+            <li>開啟 repo 的 <strong>Actions</strong> 分頁，等 <code>pages build and deployment</code> 出現綠色勾勾（或至少不再失敗）。</li>
+            <li>回到 <strong>Settings → Pages</strong>，上方會顯示網站網址，格式通常為：<br>
+                <code>https://你的帳號.github.io/儲存庫名稱/</code></li>
+            <li>若檔名不是 <code>index.html</code>，請在網址後加上檔名，例如：<br>
+                <code>https://你的帳號.github.io/tennis-tracker/tracker-sheet.html</code></li>
+        </ol>
+
+        <div class="panel warn">
+            <h3>常見問題</h3>
+            <ul>
+                <li><strong>404 或舊畫面</strong>：確認 Folder 與檔案路徑一致；建置完成後等 1～2 分鐘再重新整理，必要時強制重新整理（Ctrl+F5）。</li>
+                <li><strong>紅色 ✕</strong>：多半是 <code>/docs</code> 不存在或為空，改為 <code>/ (root)</code> 或建立 <code>docs</code> 並把 HTML 移入。</li>
+            </ul>
+        </div>
+
+        <h2>二、用 Google 試算表當「免費雲端資料庫」</h2>
+        <p>靜態網頁無法直接寫入試算表，需透過 <strong>Google Apps Script</strong> 部署成 <strong>Web App</strong>，由網頁用 <code>fetch</code> 呼叫該網址來讀寫。</p>
+
+        <h3>2.1 兩種常見後端模式（先選一種）</h3>
+        <table>
+            <thead><tr><th>模式</th><th>試算表長相</th><th>適用</th></tr></thead>
+            <tbody>
+                <tr><td><strong>A · 不自訂格式</strong></td><td>整包 JSON 存在單一儲存格（例如分頁 <code>AppData</code> 的 <code>A1</code>），不在試算表裡「一格一格欄位」維護</td><td>最快上手、與網頁資料結構 1:1</td></tr>
+                <tr><td><strong>B · 自訂格式</strong></td><td>除 <code>A1</code> 整包備份外，另寫入 <code>records</code>、<code>settings</code> 等分頁，有表頭與多列（方便人用眼睛看、篩選）</td><td>要報表、要與 <code>tracker-sheet.html</code> 的 <code>sheetModel</code> 對齊</td></tr>
+            </tbody>
+        </table>
+        <p>以下 <code>程式碼.gs</code> 範例皆需<strong>刪除</strong> Google 預設的 <code>function myFunction() {}</code>，整檔貼上後再部署。</p>
+
+        <h3>2.2 建立試算表與 Apps Script</h3>
+        <ol>
+            <li>開啟 <a href="https://sheets.google.com" target="_blank" rel="noopener">Google 試算表</a>，<strong>新增</strong>試算表（建議從這張表按 <strong>擴充功能 → Apps Script</strong>，腳本才會綁定到正確的 <code>SpreadsheetApp.getActiveSpreadsheet()</code>）。</li>
+            <li>在編輯器開啟 <code>程式碼.gs</code>，貼上「模式 A」或「模式 B」其中一份完整程式碼。</li>
+            <li>按 <strong>Ctrl+S</strong> 儲存；可選：上方選 <code>doGet</code> 按 <strong>執行</strong> 完成一次授權。</li>
+        </ol>
+
+        <h3>2.3 模式 A：新增後端 · 不自訂試算表欄位（整包 JSON）</h3>
+        <p>行為：<code>doPost</code> 把網頁送來的 JSON 字串整包寫入 <code>AppData!A1</code>；<code>doGet</code> 讀出同一字串回傳。清空時網頁送本文 <code>null</code> 會清掉 <code>AppData</code> 分頁內容。</p>
+        <p><strong>若要改存別的儲存格</strong>：修改常數 <code>DATA_SHEET</code>、<code>DATA_CELL</code>。</p>
+<pre>const DATA_SHEET = 'AppData';
+const DATA_CELL = 'A1';
+
+function doGet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(DATA_SHEET);
+  if (!sh) {
+    return ContentService.createTextOutput('null').setMimeType(ContentService.MimeType.JSON);
+  }
+  const raw = sh.getRange(DATA_CELL).getValue();
+  if (raw === '' || raw === null || raw === undefined) {
+    return ContentService.createTextOutput('null').setMimeType(ContentService.MimeType.JSON);
+  }
+  const str = typeof raw === 'string' ? raw : JSON.stringify(raw);
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify({ error: 'invalid_json_in_sheet' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  return ContentService.createTextOutput(str).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const body = e.postData ? e.postData.contents : '';
+  if (body === null || body === undefined || String(body).trim() === '' || String(body).trim() === 'null') {
+    clearAppData_();
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, cleared: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  let obj;
+  try {
+    obj = JSON.parse(body);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'bad_json' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(DATA_SHEET);
+  if (!sh) sh = ss.insertSheet(DATA_SHEET);
+  sh.getRange(DATA_CELL).setValue(JSON.stringify(obj));
+  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function clearAppData_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(DATA_SHEET);
+  if (sh) sh.clear();
+}</pre>
+
+        <h3>2.4 模式 B：新增後端 · 自訂分頁與欄位（records / settings）</h3>
+        <p>在模式 A 的基礎上，若 POST 的 JSON 裡帶有 <code>sheetModel.sheets</code>（例如 <code>tracker-sheet.html</code> 的 <code>save()</code>），會<strong>另外</strong>寫入：</p>
+        <ul>
+            <li><strong>records</strong>：表頭 <code>id, fullDate, dateLabel, type, hours, courtNote, classNote, phaseStart, createdAt</code>，以下一列一筆紀錄。</li>
+            <li><strong>settings</strong>：表頭 <code>key, value</code>，列如 <code>currentPhaseStart</code>、<code>phases</code>（JSON 字串）、<code>courtDefault</code>、<code>remarkSchedule</code>（JSON 字串）、<code>maxHours</code>。</li>
+        </ul>
+        <p><strong>若要改分頁名稱或欄位</strong>：須同時改 Apps Script 的 <code>writeSheetModel_</code> / <code>writeTableSheet_</code>，以及網頁端產生 <code>sheetModel</code> 的程式（見下節 HTML）。</p>
+<pre>const DATA_SHEET = 'AppData';
+const DATA_CELL = 'A1';
+
+function doGet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(DATA_SHEET);
+  if (!sh) {
+    return ContentService.createTextOutput('null').setMimeType(ContentService.MimeType.JSON);
+  }
+  const raw = sh.getRange(DATA_CELL).getValue();
+  if (raw === '' || raw === null || raw === undefined) {
+    return ContentService.createTextOutput('null').setMimeType(ContentService.MimeType.JSON);
+  }
+  const str = typeof raw === 'string' ? raw : JSON.stringify(raw);
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify({ error: 'invalid_json_in_sheet' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  return ContentService.createTextOutput(str).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const body = e.postData ? e.postData.contents : '';
+  if (body === null || body === undefined || String(body).trim() === '' || String(body).trim() === 'null') {
+    clearAll_();
+    return ContentService.createTextOutput(JSON.stringify({ ok: true, cleared: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  let obj;
+  try {
+    obj = JSON.parse(body);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'bad_json' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  savePayload_(obj);
+  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function savePayload_(obj) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(DATA_SHEET);
+  if (!sh) sh = ss.insertSheet(DATA_SHEET);
+  sh.getRange(DATA_CELL).setValue(JSON.stringify(obj));
+  if (obj && obj.sheetModel && obj.sheetModel.sheets) {
+    writeSheetModel_(ss, obj.sheetModel);
+  }
+}
+
+function writeSheetModel_(ss, sheetModel) {
+  const sm = sheetModel.sheets;
+  if (sm.records) writeTableSheet_(ss, 'records', sm.records.headers, sm.records.rows);
+  if (sm.settings) writeTableSheet_(ss, 'settings', sm.settings.headers, sm.settings.rows);
+}
+
+function writeTableSheet_(ss, name, headers, rows) {
+  if (!headers || !headers.length) return;
+  let sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
+  sh.clear();
+  const data = [headers].concat(rows || []);
+  sh.getRange(1, 1, data.length, headers.length).setValues(data);
+}
+
+function clearAll_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ['AppData', 'records', 'settings'].forEach(function (n) {
+    const sh = ss.getSheetByName(n);
+    if (sh) sh.clear();
+  });
+}</pre>
+
+        <h3>2.5 修改試算表 Web App 網址（tracker-sheet.html）</h3>
+        <p>檔案：<code>tracker-sheet.html</code>（本機路徑例如 <code>OneDrive/AI/tracker-sheet.html</code>，或你已上傳到 GitHub 的那份）。</p>
+
+        <div class="panel">
+            <h3 style="margin-top:0;color:var(--accent);">重點：之後若要換網址，主要改「一個常數」</h3>
+            <p style="margin-bottom:0.5rem;">在 <code>&lt;script&gt;</code> 開頭設定區，找到 <strong><code>DEFAULT_WEBAPP_URL</code></strong>，只改這一行引號裡的網址即可當作<strong>全站／全檔預設</strong>的 Web App。其餘 <code>getWebAppUrl()</code>、<code>load()</code>、<code>syncPostSheet()</code> 會自動使用它（除非瀏覽器另有自訂覆寫）。</p>
+        </div>
+
+        <h3>2.5.1 具體怎麼改（逐步）</h3>
+        <ol>
+            <li>用文字編輯器或 Cursor 開啟 <code>tracker-sheet.html</code>。</li>
+            <li>按 <strong>Ctrl+F</strong>（Mac：<strong>Cmd+F</strong>）搜尋：<code>DEFAULT_WEBAPP_URL</code>。</li>
+            <li>會看到類似下面這一行（僅示意，你的網址會不同）：</li>
+        </ol>
+<pre>const DEFAULT_WEBAPP_URL = 'https://script.google.com/macros/s/你的部署ID/exec';</pre>
+        <ol start="4">
+            <li>把<strong>兩個單引號中間</strong>整串網址，換成你在 Apps Script <strong>部署</strong>後複製的新網址（必須以 <code>/exec</code> 結尾，通常長度很長屬正常）。</li>
+            <li><strong>不要</strong>刪掉兩端的單引號 <code>'</code>，也不要在網址中間斷行。</li>
+            <li>存檔。</li>
+            <li>若網頁是放在 <strong>GitHub Pages</strong>：把更新後的 <code>tracker-sheet.html</code> 再 <strong>commit / push</strong>（或網頁上傳覆蓋），等 Actions 綠勾後重新整理頁面。</li>
+            <li>若你只在<strong>本機雙擊開啟</strong> HTML：存檔後重新整理瀏覽器即可。</li>
+        </ol>
+
+        <h3>2.5.2 不需要為了換網址而改的東西</h3>
+        <ul>
+            <li>一般情況<strong>不必改</strong> <code>WEBAPP_URL_KEY</code>（那是 <code>localStorage</code> 的鍵名，改掉會讓舊的自訂網址讀不到）。</li>
+            <li>不必改 <code>getWebAppUrl</code>、<code>syncPostSheet</code> 函式本體，除非你要自己改邏輯。</li>
+        </ul>
+
+        <h3>2.5.3 與「檔案預設」並存：瀏覽器自訂網址（選用）</h3>
+        <table>
+            <thead><tr><th>要做的事</th><th>改哪裡</th><th>怎麼改</th></tr></thead>
+            <tbody>
+                <tr><td><strong>預設給所有人同一個 /exec（推薦用常數）</strong></td><td><code>DEFAULT_WEBAPP_URL</code></td><td>見上方 2.5.1</td></tr>
+                <tr><td><strong>只在某台電腦暫時換網址（不動檔案、不上傳 GitHub）</strong></td><td>網頁按 <strong>☁️ 雲端</strong></td><td>貼上網址後確定；會寫入 <code>localStorage</code> 鍵 <code>tennis_sheet_webapp_url</code>，<strong>優先於</strong> <code>DEFAULT_WEBAPP_URL</code></td></tr>
+                <tr><td><strong>清除瀏覽器自訂、改回檔案裡的預設常數</strong></td><td><strong>☁️ 雲端</strong></td><td>輸入框<strong>留空</strong> → 確定 → 會 <code>removeItem('tennis_sheet_webapp_url')</code></td></tr>
+            </tbody>
+        </table>
+        <p>相關程式（想進階再改時，用搜尋跳轉）：<code>WEBAPP_URL_KEY</code>、<code>DEFAULT_WEBAPP_URL</code>、<code>function getWebAppUrl()</code>、<code>function syncPostSheet</code>、<code>function load()</code>、<code>openCloudUrlSettings</code>。</p>
+        <p><strong>若你自寫的 HTML 沒有 <code>DEFAULT_WEBAPP_URL</code></strong>：在 <code>&lt;script&gt;</code> 設定區把 <code>fetch</code> 用的網址變數（舊名可能叫 <code>DB_URL</code>）改成你的 <code>/exec</code>；POST 請用 <code>Content-Type: text/plain;charset=utf-8</code>，本文仍為 JSON 字串（見下節）。</p>
+
+        <h3>2.6 前端與後端如何對接（POST / GET）</h3>
+        <ul>
+            <li><strong>GET</strong>：<code>fetch(你的/exec)</code>，回應為 JSON 字串；全新試算表尚未寫入時，瀏覽器可能看到 <code>null</code>，屬正常。</li>
+            <li><strong>POST</strong>：<code>headers: { 'Content-Type': 'text/plain;charset=utf-8' }</code>，<code>body: JSON.stringify(物件)</code>。不要用 <code>application/json</code>，以免觸發 CORS 預檢在部分環境失敗。</li>
+            <li><strong>清空</strong>：<code>tracker-sheet.html</code> 會 POST 本文 <code>null</code>；後端需依 2.3 / 2.4 範例清除對應分頁。</li>
+        </ul>
+
+        <h3>2.7 自訂格式時，網頁端要改哪裡（sheetModel）</h3>
+        <p>若你使用 <code>tracker-sheet.html</code>：搜尋 <code>function buildSheetModel()</code>。要改的通常是：</p>
+        <ul>
+            <li><code>recordsHeaders</code> 陣列順序與名稱（須與 Apps Script 寫入的分頁欄位一致）。</li>
+            <li><code>recordsRows</code> 的 <code>map</code>，讓每一列對應到 <code>data.history</code> 裡的欄位。</li>
+            <li><code>settingsRows</code>：要同步到 <code>settings</code> 分頁的 key/value。</li>
+        </ul>
+        <p>改完網頁後，Apps Script 模式 B 的 <code>writeSheetModel_</code> 分頁名稱若與網頁不一致，也要一併修改。</p>
+
+        <h3>2.8 部署為 Web 應用程式</h3>
+        <ol>
+            <li>Apps Script 編輯器右上角 <strong>部署 → 新增部署作業</strong>。</li>
+            <li>類型選 <strong>網路應用程式</strong>。</li>
+            <li><strong>執行身分</strong>：選「我」。</li>
+            <li><strong>具有存取權的使用者</strong>：從 GitHub Pages 匿名讀寫請選 <strong>任何人</strong>。首次部署會要求授權。</li>
+            <li>複製 <strong>網路應用程式 URL</strong>（結尾 <code>/exec</code>），貼到 <code>tracker-sheet.html</code> 的 <code>DEFAULT_WEBAPP_URL</code> 或 ☁️ 雲端設定。</li>
+        </ol>
+
+        <h3>2.9 修改腳本後要「重新部署」</h3>
+        <ol>
+            <li><strong>部署 → 管理部署作業</strong> → 選既有 Web App → <strong>編輯（鉛筆）</strong>。</li>
+            <li><strong>版本</strong> 選 <strong>新版本</strong>，再按部署。僅儲存程式碼不會更新線上行為。</li>
+        </ol>
+
+        <div class="panel warn">
+            <h3>安全與限度（必讀）</h3>
+            <ul>
+                <li>Web App 網址若被取得，他人也可能呼叫；<strong>不適合存放密碼、個資、金流</strong>。僅適合低風險、可公開或半公開的資料。</li>
+                <li>Google 有每日執行時間與呼叫次數配額，大量使用者時可能觸發限制。</li>
+                <li>試算表權限與「執行身分」會影響誰能寫入哪一格，部署前請再確認。</li>
+            </ul>
+        </div>
+
+        <p style="margin-top:2rem;font-size:0.85rem;color:rgba(0,0,0,0.45);">筆記路徑：<code>OneDrive/AI/Flow/GitHub-Pages與Google-Sheet後端筆記.html</code> · 可搭配同目錄 <code>.txt</code> 純文字版</p>
+    </div>
+</body>
+</html>
