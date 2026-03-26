@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 開發與自動化名詞與關聯 · Claude · Cursor · n8n · MCP</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg: #d6d7db;
+            --panel: #efeff2;
+            --text: #1c1c20;
+            --accent: #5c4a0f;
+            --muted: #45454d;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+        .diagram-wrap {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .diagram-wrap .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .terms {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .terms h2 {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .terms dt {
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 0.75rem;
+        }
+        .terms dd {
+            margin-left: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(92, 74, 15, 0.08);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .term-diagrams { max-width: 720px; margin: 0 auto; }
+        .term-diagrams h2 { color: var(--accent); font-size: 1.1rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .term-diagram {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .term-diagram h3 { color: var(--accent); font-size: 0.95rem; margin: 0 0 0.75rem 0; }
+        .term-diagram .mermaid { min-height: 60px; display: flex; justify-content: center; align-items: center; }
+        .brief-section {
+            max-width: 720px;
+            margin: 0 auto 2rem;
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .brief-section h2 { color: var(--accent); font-size: 1.1rem; margin: 0 0 1rem 0; }
+        .brief-section table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .brief-section th, .brief-section td { border: 1px solid rgba(0,0,0,0.12); padding: 0.5rem 0.75rem; text-align: left; }
+        .brief-section th { color: var(--accent); background: rgba(0,0,0,0.05); }
+        .brief-section td { color: var(--muted); }
+        .brief-section td:first-child { color: var(--text); width: 6em; }
+        .brief-section .capability { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08); color: var(--muted); font-size: 0.9rem; }
+        .diagram-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <h1>AI 開發與自動化名詞與關聯</h1>
+    <p class="subtitle">Claude · Cursor · Antigravity · n8n · Gemini · ChatGPT · MCP · Skill · Prompt 等</p>
+
+    <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+    subgraph You["你 / 開發者"]
+        P[Prompt 提示詞]
+    end
+
+    subgraph Interface["你使用的介面與產品"]
+        Cursor["Cursor<br/>程式編輯器 + AI"]
+        Antigravity["Antigravity<br/>Google AI 程式編輯器"]
+        ChatGPT["ChatGPT<br/>OpenAI 網頁對話"]
+        VS Code["VS Code<br/>程式編輯器"]
+        n8n["n8n<br/>工作流自動化"]
+    end
+
+    subgraph Models["AI 模型"]
+        Claude["Claude"]
+        Gemini["Gemini"]
+        GPT["GPT"]
+    end
+
+    subgraph Provider["模型提供者"]
+        Anthropic["Anthropic"]
+        Google["Google"]
+        OpenAI["OpenAI"]
+    end
+
+    subgraph Protocol["協定 / 擴充"]
+        MCP["MCP"]
+        Skill["Skill 技能"]
+    end
+
+    P --> Cursor
+    P --> Antigravity
+    P --> ChatGPT
+    P --> n8n
+    Cursor --> Claude
+    Cursor --> Gemini
+    Cursor --> GPT
+    Antigravity --> Gemini
+    Antigravity --> Claude
+    Antigravity --> GPT
+    Google -.-> Antigravity
+    ChatGPT --> GPT
+    n8n --> GPT
+    n8n --> Claude
+    VS Code -.-> Cursor
+    MCP -.-> Cursor
+    MCP -.-> Antigravity
+    Skill -.-> Cursor
+    Skill -.-> Antigravity
+    Anthropic --> Claude
+    Google --> Gemini
+    OpenAI --> GPT
+        </pre>
+        <p class="diagram-caption"><strong>圖說明：</strong>你透過 Prompt 在 Cursor、Antigravity、ChatGPT、n8n 下指令；Cursor 與 Antigravity 皆可接 MCP（連外部工具）與 Skill（擴充代理流程與方法）；各介面背後連到 Claude、Gemini、GPT 等模型，由 Anthropic、Google、OpenAI 提供。</p>
+    </div>
+
+    <div class="diagram-wrap">
+        <h3 style="text-align:center; color: var(--accent); font-size: 1rem; margin-bottom: 1rem;">什麼是 LLM？</h3>
+        <pre class="mermaid">
+flowchart LR
+    subgraph Def["定義"]
+        LLM["LLM"]
+        EN["Large Language Model"]
+        ZH["大型語言模型"]
+    end
+    LLM --> EN
+    LLM --> ZH
+    subgraph Examples["常見例子"]
+        Claude["Claude"]
+        GPT["GPT"]
+        Gemini["Gemini"]
+    end
+    Def -.->|屬於此類| Examples
+        </pre>
+        <p class="diagram-caption"><strong>圖說明：</strong>LLM 即 Large Language Model（大型語言模型）；Claude、GPT、Gemini 都屬於此類 AI 模型。</p>
+    </div>
+
+    <div class="brief-section">
+        <h2>Antigravity 是什麼（簡要）</h2>
+        <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem;">Antigravity 是 Google 的 AI 程式編輯器，和 Cursor 同屬「用 AI 輔助寫程式」的編輯器，但設計重點不同：</p>
+        <table>
+            <thead>
+                <tr><th>項目</th><th>Cursor</th><th>Antigravity</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>基底</td><td>以 VS Code 為基礎</td><td>Google 自家 IDE</td></tr>
+                <tr><td>特色</td><td>對話 + 補全、改碼，可接 MCP</td><td>多個 AI 代理自主規劃、寫碼、測試、驗證</td></tr>
+                <tr><td>使用方式</td><td>你下 prompt，AI 建議或改程式</td><td>用自然語言描述目標，代理在編輯器／終端／瀏覽器裡執行</td></tr>
+                <tr><td>模型</td><td>Claude、Gemini、GPT 等</td><td>主打 Gemini，也支援 Claude、GPT</td></tr>
+                <tr><td>脈絡</td><td>約 20 萬 token</td><td>約 100 萬 token</td></tr>
+                <tr><td>推出方</td><td>Cursor 公司</td><td>Google</td></tr>
+            </tbody>
+        </table>
+        <div class="capability">
+            <strong style="color: var(--accent);">圖片與遊戲動畫：</strong><br>
+            <strong>Cursor</strong> 不能直接產生圖檔，只能幫你寫程式或提示詞去呼叫外部圖像 API。<br>
+            <strong>Antigravity 可以</strong>在 IDE 內直接產圖：內建 Imagen 3、Nano Banana Pro（Gemini 3 Pro Image）等模型，用自然語言描述需求即可產圖並整合進專案（例如 UI  mockup、插圖、系統圖）。<br>
+            <strong>遊戲與動畫</strong>方面，Antigravity 可依你的描述讓代理寫出遊戲程式並搭配產圖，快速做出可玩遊戲與 UI／動態效果（例如幾分鐘內完成一個小遊戲的程式與視覺），適合 MVP 或 demo；是否可「直接產出動畫影片檔」依產品更新為準。
+        </div>
+    </div>
+
+    <div class="terms">
+        <h2>名詞說明</h2>
+        <dl>
+            <dt>LLM</dt>
+            <dd>LLM 是 Large Language Model 的縮寫，中文常說「大型語言模型」。指用大量文字訓練、能理解與產生人類語言的 AI 模型；Claude、GPT、Gemini 都屬於 LLM。</dd>
+
+            <dt>Prompt（提示詞）</dt>
+            <dd>你輸入給 AI 的指令或問題。在 Cursor、Antigravity、ChatGPT、n8n 的 AI 節點等地方都會用到。AI 根據 prompt 產生回覆或執行動作。</dd>
+
+            <dt>Cursor</dt>
+            <dd>以 VS Code 為基礎的程式編輯器，內建 AI 助理。用 prompt 與 AI 對話，可選 Claude、Gemini、GPT 等模型，支援 MCP 與 <strong>Skill（技能）</strong> 擴充：MCP 連外部工具，Skill 提供可重用的流程與領域知識。與 Antigravity 同屬「AI 程式編輯器」類型。</dd>
+
+            <dt>Antigravity</dt>
+            <dd>Google 推出的 AI 程式編輯器（IDE），與 Cursor 類似，主打「代理優先」：用自然語言描述目標，由多個 AI 代理自主規劃、寫碼、測試與驗證。支援 Gemini、Claude、GPT；具多代理協作、約 100 萬 token 脈絡、內建瀏覽器自動化與沙盒環境；同樣支援 MCP 與 <strong>Skill（技能）</strong>。與 Cursor 的重要差異：<strong>可內建直接產圖</strong>（Imagen 3、Nano Banana Pro 等），並可讓代理寫遊戲程式＋產圖，快速做出可玩遊戲與 UI；Cursor 則不能直接產圖。有 Windows / macOS / Linux 桌面版。詳見上方「Antigravity 是什麼（簡要）」。</dd>
+
+            <dt>ChatGPT</dt>
+            <dd>OpenAI 的網頁版對話介面，使用 GPT 系列模型。適合一般問答、寫稿、翻譯；寫程式則常用 Cursor 等編輯器整合。</dd>
+
+            <dt>VS Code</dt>
+            <dd>微軟的程式碼編輯器，開放原始碼。Cursor 是基於 VS Code 的「加上了 AI」的版本，外觀與操作類似。</dd>
+
+            <dt>n8n</dt>
+            <dd>開源的工作流自動化工具（類似 Zapier、Make），用節點拖拉串接各種服務。內建或可安裝 OpenAI、Anthropic 等 AI 節點，可把 prompt 送給 Claude、GPT 等，並與 Gmail、Slack、資料庫、API 等串接，做自動化流程。</dd>
+
+            <dt>Claude</dt>
+            <dd>Anthropic 的 LLM，擅長對話、分析與程式。在 Cursor、n8n、或 Claude 官網都可使用。</dd>
+
+            <dt>Gemini</dt>
+            <dd>Google 的 AI 模型，具多模態與推理能力。在 Cursor、Google AI Studio、Bard 等產品中可選用。</dd>
+
+            <dt>GPT</dt>
+            <dd>OpenAI 的語言模型系列（如 GPT-4）。用於 ChatGPT、Cursor、n8n、或透過 API 整合到自己的應用。</dd>
+
+            <dt>Anthropic</dt>
+            <dd>開發 Claude 的公司，與 OpenAI、Google 同屬 AI 模型提供者。</dd>
+
+            <dt>OpenAI</dt>
+            <dd>開發 GPT 與 ChatGPT 的公司，提供 API 供 Cursor、n8n、自建服務等呼叫。</dd>
+
+            <dt>MCP（Model Context Protocol）</dt>
+            <dd>讓 AI 助理連到外部工具與資料的協定。<strong>Cursor 與 Antigravity 都支援 MCP</strong>，裝 MCP 伺服器後，AI 可呼叫資料庫、API、本機腳本等，擴充能力。Antigravity 另提供 MCP Store 與 Google Cloud（BigQuery、AlloyDB 等）預建整合。與 Skill 的關係：MCP 負責「連到哪」（手腳／工具），Skill 負責「怎麼做」（流程／方法）。</dd>
+
+            <dt>Skill（技能）</dt>
+            <dd><strong>Cursor 與 Antigravity 都有</strong>。Skill 是可重用的指令集或知識包，教 AI 代理如何執行特定任務（例如部署到測試環境、程式碼審查、寫文件）。通常以 Markdown 或目錄形式存放（Cursor：<code>.cursor/skills/</code>、<code>.agents/skills/</code>；Antigravity：<code>.agent/skills/</code>、<code>~/.gemini/antigravity/skills/</code>）。可手動觸發（如 <code>/skill-name</code>）或由代理依任務語意自動套用。與 MCP 互補：Skill 提供「做法與流程」，MCP 提供「對外連線與工具」。</dd>
+        </dl>
+
+        <div class="term-diagrams">
+            <h2>各名詞說明圖</h2>
+            <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem;">每個名詞的關係與角色用圖示補充如下。</p>
+
+        <div class="term-diagram">
+            <h3>LLM</h3>
+            <pre class="mermaid">flowchart LR
+    LLM[LLM] --> A[Large Language Model]
+    LLM --> B[大型語言模型]
+    C[Claude] & D[GPT] & E[Gemini] -.->|屬於| LLM</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>Prompt（提示詞）</h3>
+            <pre class="mermaid">flowchart LR
+    U[你] -->|輸入| P[Prompt]
+    P --> C[Cursor]
+    P --> A[Antigravity]
+    P --> G[ChatGPT]
+    P --> N[n8n]
+    C & A & G & N -->|送給| AI[AI 模型]</pre>
+            <p class="diagram-caption"><strong>說明：</strong>Prompt 是你在各介面輸入的指令，會送給背後的 AI 模型處理。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>Cursor</h3>
+            <pre class="mermaid">flowchart TB
+    V[VS Code] -->|基底| C[Cursor]
+    C --> M1[Claude]
+    C --> M2[Gemini]
+    C --> M3[GPT]
+    MCP[MCP] -.->|擴充| C
+    Skill[Skill] -.->|擴充| C</pre>
+            <p class="diagram-caption"><strong>說明：</strong>Cursor 以 VS Code 為基底，可選 Claude／Gemini／GPT，並透過 MCP 連接外部工具、透過 Skill 擴充代理的流程與領域知識。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>Antigravity</h3>
+            <pre class="mermaid">flowchart TB
+    G[Google] -.->|推出| A[Antigravity]
+    A -->|主要| Gem[Gemini]
+    A --> Claude[Claude]
+    A --> GPT[GPT]
+    A -->|多代理| Agent[自主規劃 / 寫碼 / 測試]
+    MCP[MCP] -.->|擴充| A
+    Skill[Skill] -.->|擴充| A</pre>
+            <p class="diagram-caption"><strong>說明：</strong>Antigravity 由 Google 推出，主打 Gemini，也支援 Claude、GPT；支援 MCP 與 Skill 擴充；內建產圖與多代理自主執行。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>Cursor 與 Antigravity 一起看</h3>
+            <pre class="mermaid">flowchart TB
+    subgraph Common["共通點"]
+        P[Prompt]
+        M[Claude / Gemini / GPT]
+        MCP[MCP 擴充]
+        Skill[Skill 擴充]
+    end
+    subgraph Cur["Cursor"]
+        V[VS Code 基底]
+        NoImg[無內建產圖]
+    end
+    subgraph Anti["Antigravity"]
+        G[Google 推出]
+        Img[內建產圖]
+        Agent[多代理]
+    end
+    P --> Cur
+    P --> Anti
+    Cur --> M
+    Anti --> M
+    MCP --> Cur
+    MCP --> Anti
+    Skill --> Cur
+    Skill --> Anti</pre>
+            <p class="diagram-caption"><strong>說明：</strong>兩者都是 AI 程式編輯器，都吃 Prompt、都可用 Claude／Gemini／GPT、都支援 MCP 與 Skill。差異：Cursor 以 VS Code 為基底、不內建產圖；Antigravity 為 Google 推出、內建產圖與多代理。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>Skill（技能）</h3>
+            <pre class="mermaid">flowchart TB
+    subgraph Use["使用 Skill 的產品"]
+        Cursor[Cursor]
+        Anti[Antigravity]
+    end
+    Skill[Skill 技能] -.->|擴充流程與方法| Cursor
+    Skill -.->|擴充流程與方法| Anti
+    subgraph Content["Skill 內容"]
+        How[做法 / 流程]
+        Know[領域知識]
+    end
+    Skill --> How
+    Skill --> Know
+    MCP[MCP] -.->|連線 / 工具| Cursor
+    MCP -.->|連線 / 工具| Anti</pre>
+            <p class="diagram-caption"><strong>說明：</strong>Cursor 與 Antigravity 都支援 Skill。Skill 提供「怎麼做」（流程、領域知識），MCP 提供「連到哪」（資料庫、API、腳本）。兩者互補。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>ChatGPT</h3>
+            <pre class="mermaid">flowchart LR
+    U[使用者] -->|網頁對話| ChatGPT[ChatGPT]
+    ChatGPT -->|使用| GPT[GPT]</pre>
+            <p class="diagram-caption"><strong>說明：</strong>ChatGPT 是 OpenAI 的網頁介面，使用 GPT 模型，不支援 MCP。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>VS Code</h3>
+            <pre class="mermaid">flowchart LR
+    VS[VS Code<br/>程式編輯器] -->|加 AI 整合| Cursor[Cursor]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>n8n</h3>
+            <pre class="mermaid">flowchart LR
+    T[觸發] --> N[n8n 工作流]
+    N --> AI[AI 節點<br/>Claude / GPT]
+    N --> S[Gmail / Slack / API / DB]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>Claude</h3>
+            <pre class="mermaid">flowchart LR
+    A[Anthropic] -->|開發| C[Claude]
+    C --> U1[Cursor]
+    C --> U2[n8n]
+    C --> U3[Claude 官網]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>Gemini</h3>
+            <pre class="mermaid">flowchart LR
+    G[Google] -->|開發| Gem[Gemini]
+    Gem --> U1[Cursor]
+    Gem --> U2[Google AI Studio]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>GPT</h3>
+            <pre class="mermaid">flowchart LR
+    O[OpenAI] -->|開發| GPT[GPT]
+    GPT --> U1[ChatGPT]
+    GPT --> U2[Cursor]
+    GPT --> U3[n8n / API]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>Anthropic</h3>
+            <pre class="mermaid">flowchart LR
+    A[Anthropic] -->|提供| Claude[Claude]
+    A -->|同屬| P[模型提供者]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>OpenAI</h3>
+            <pre class="mermaid">flowchart LR
+    O[OpenAI] -->|提供| GPT[GPT]
+    O -->|提供| ChatGPT[ChatGPT]
+    O -->|提供| API[API]</pre>
+        </div>
+        <div class="term-diagram">
+            <h3>MCP 與 Skill 的關係</h3>
+            <pre class="mermaid">flowchart LR
+    subgraph IDE["IDE"]
+        Cursor[Cursor]
+        Anti[Antigravity]
+    end
+    MCP[MCP] -->|連到哪| Tool[資料庫 / API / 腳本]
+    Skill[Skill] -->|怎麼做| Flow[流程 / 方法 / 知識]
+    MCP -.-> Cursor
+    MCP -.-> Anti
+    Skill -.-> Cursor
+    Skill -.-> Anti</pre>
+            <p class="diagram-caption"><strong>說明：</strong>MCP 負責「連到外部系統」（手腳）；Skill 負責「教代理怎麼執行任務」（做法）。Cursor 與 Antigravity 兩者都支援。</p>
+        </div>
+        <div class="term-diagram">
+            <h3>MCP（Model Context Protocol）</h3>
+            <pre class="mermaid">flowchart LR
+    Cursor[Cursor] <-->|MCP| M[MCP 伺服器]
+    Anti[Antigravity] <-->|MCP| M
+    M <--> DB[資料庫]
+    M <--> API[API]
+    M <--> Script[本機腳本]</pre>
+            <p class="diagram-caption"><strong>說明：</strong>Cursor 與 Antigravity 都支援 MCP；透過 MCP 伺服器可連到資料庫、API、本機腳本等，讓 AI 在編輯器內直接使用外部工具與資料。</p>
+        </div>
+        </div>
+    </div>
+
+    <div class="terms">
+        <div class="note">
+            <strong>關聯摘要：</strong>你用 <strong>Prompt</strong> 在 <strong>Cursor</strong>、<strong>Antigravity</strong>、<strong>ChatGPT</strong> 或 <strong>n8n</strong> 下指令 → 各介面把 prompt 送給 <strong>Claude</strong>、<strong>Gemini</strong>、<strong>GPT</strong> 等模型。<strong>Cursor</strong> 與 <strong>Antigravity</strong> 都支援 <strong>MCP</strong>（連外部工具）與 <strong>Skill</strong>（擴充代理流程與領域知識）；<strong>n8n</strong> 可把 AI 與其他服務串成自動化流程；<strong>VS Code</strong> 是 Cursor 的基底編輯器。
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
