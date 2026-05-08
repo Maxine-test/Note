@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dev & Automation Glossary · Claude · Cursor · n8n · MCP</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg: #d6d7db;
+            --panel: #efeff2;
+            --text: #1c1c20;
+            --accent: #5c4a0f;
+            --muted: #45454d;
+            --claude: #d97239;
+            --claude-light: #fdf0e8;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+        .diagram-wrap {
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .diagram-wrap .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .terms {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .terms h2 {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .terms dt {
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 0.75rem;
+        }
+        .terms dd {
+            margin-left: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(92, 74, 15, 0.08);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .claude-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--claude-light);
+            border-radius: 8px;
+            border-left: 4px solid var(--claude);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .term-diagrams { max-width: 720px; margin: 0 auto; }
+        .term-diagrams h2 { color: var(--accent); font-size: 1.1rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .term-diagram {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .term-diagram.claude-highlight {
+            border-color: var(--claude);
+            background: var(--claude-light);
+        }
+        .term-diagram h3 { color: var(--accent); font-size: 0.95rem; margin: 0 0 0.75rem 0; }
+        .term-diagram.claude-highlight h3 { color: var(--claude); }
+        .term-diagram .mermaid { min-height: 60px; display: flex; justify-content: center; align-items: center; }
+        .brief-section {
+            max-width: 720px;
+            margin: 0 auto 2rem;
+            background: var(--panel);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .brief-section.claude-section {
+            border-color: var(--claude);
+            background: var(--claude-light);
+        }
+        .brief-section h2 { color: var(--accent); font-size: 1.1rem; margin: 0 0 1rem 0; }
+        .brief-section.claude-section h2 { color: var(--claude); }
+        .brief-section table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .brief-section th, .brief-section td { border: 1px solid rgba(0,0,0,0.12); padding: 0.5rem 0.75rem; text-align: left; }
+        .brief-section th { color: var(--accent); background: rgba(0,0,0,0.05); }
+        .brief-section.claude-section th { color: var(--claude); }
+        .brief-section td { color: var(--muted); }
+        .brief-section td:first-child { color: var(--text); width: 7em; }
+        .brief-section .capability { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08); color: var(--muted); font-size: 0.9rem; }
+        .diagram-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.5; }
+        .section-label {
+            max-width: 720px;
+            margin: 2rem auto 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.4rem;
+        }
+        .section-label.claude-label {
+            color: var(--claude);
+            border-color: var(--claude);
+        }
+        .badge {
+            display: inline-block;
+            background: var(--claude);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Development & Automation — Terms & Relationships</h1>
+    <p class="subtitle">Claude · Cursor · Antigravity · n8n · Gemini · ChatGPT · MCP · Skill · Prompt</p>
+
+    <!-- ── Overview diagram ── -->
+    <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+    subgraph You["You / User"]
+        P[Prompt]
+    end
+
+    subgraph ClaudeProducts["Claude Product Line (Anthropic)"]
+        ClaudeChat["Claude.ai Chat\nWeb / App conversation"]
+        ClaudeCode["Claude Code\nTerminal AI agent"]
+        Cowork["Cowork\nDesktop automation agent"]
+    end
+
+    subgraph Interface["Other AI Interfaces & Tools"]
+        Cursor["Cursor\nCode editor + AI"]
+        Antigravity["Antigravity\nGoogle AI code editor"]
+        ChatGPT["ChatGPT\nOpenAI web chat"]
+        VS Code["VS Code\nCode editor"]
+        n8n["n8n\nWorkflow automation"]
+    end
+
+    subgraph Models["AI Models"]
+        Claude["Claude (LLM)"]
+        Gemini["Gemini"]
+        GPT["GPT"]
+    end
+
+    subgraph Provider["Model Providers"]
+        Anthropic["Anthropic"]
+        Google["Google"]
+        OpenAI["OpenAI"]
+    end
+
+    subgraph Protocol["Protocols / Extensions"]
+        MCP["MCP"]
+        Skill["Skill"]
+    end
+
+    P --> ClaudeChat
+    P --> ClaudeCode
+    P --> Cowork
+    P --> Cursor
+    P --> Antigravity
+    P --> ChatGPT
+    P --> n8n
+
+    ClaudeChat --> Claude
+    ClaudeCode --> Claude
+    Cowork --> Claude
+    Cursor --> Claude
+    Cursor --> Gemini
+    Cursor --> GPT
+    Antigravity --> Gemini
+    Antigravity --> Claude
+    Antigravity --> GPT
+    Google -.-> Antigravity
+    ChatGPT --> GPT
+    n8n --> GPT
+    n8n --> Claude
+    VS Code -.-> Cursor
+    MCP -.-> ClaudeChat
+    MCP -.-> ClaudeCode
+    MCP -.-> Cursor
+    MCP -.-> Antigravity
+    Skill -.-> Cursor
+    Skill -.-> Antigravity
+    Anthropic --> Claude
+    Anthropic -.-> ClaudeProducts
+    Google --> Gemini
+    OpenAI --> GPT
+        </pre>
+        <p class="diagram-caption"><strong>Diagram note:</strong> You send instructions via Prompt to each interface. The Claude product line includes <strong>Claude.ai Chat</strong> (conversation), <strong>Claude Code</strong> (terminal agent for coding), and <strong>Cowork</strong> (desktop automation). Cursor and Antigravity are third-party AI code editors that both support MCP and Skill. Each interface connects to an underlying model — Claude, Gemini, or GPT — provided by Anthropic, Google, or OpenAI respectively.</p>
+    </div>
+
+    <!-- ── Claude product line ── -->
+    <p class="section-label claude-label">🟠 Claude Product Line</p>
+
+    <div class="brief-section claude-section">
+        <h2>Claude.ai Chat · Claude Code · Cowork — Key Differences</h2>
+        <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem;">All three are provided by Anthropic and powered by the Claude model, but they differ significantly in how you use them and how much they automate on your behalf:</p>
+        <div style="overflow-x: auto;">
+        <table style="min-width: 520px;">
+            <thead>
+                <tr><th>Attribute</th><th>Claude.ai Chat</th><th>Claude Code</th><th>Cowork</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Type</td><td>Conversational interface</td><td>Terminal AI agent</td><td>Desktop automation agent</td></tr>
+                <tr><td>How you use it</td><td>Web / App text chat; AI returns text or files</td><td>Runs locally in terminal; autonomously reads & writes code and files</td><td>Operates desktop apps (files, tasks, etc.) on your behalf</td></tr>
+                <tr><td>Automation level</td><td>Low — you ask, AI answers</td><td>High — AI agent executes multi-step tasks autonomously</td><td>High — AI controls desktop apps in an automated flow</td></tr>
+                <tr><td>Best for</td><td>Everyone; no coding needed</td><td>Developers with terminal experience</td><td>Non-developers who want to automate computer tasks</td></tr>
+                <tr><td>MCP support</td><td>✅ (connect external tools)</td><td>✅ (call MCP tools)</td><td>✅</td></tr>
+                <tr><td>Typical uses</td><td>Q&amp;A, writing, analysis, summarisation, translation</td><td>Generate / edit code, run tests, refactor, Git operations</td><td>Auto-organise files, fill forms, copy data across apps</td></tr>
+                <tr><td>Pricing</td><td>Free + Pro / Team / Enterprise</td><td>Usage-based (Claude API)</td><td>Beta — see Anthropic website</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="capability">
+            <strong style="color: var(--claude);">Quick memory trick:</strong><br>
+            <strong>Claude.ai Chat</strong> = "Chat room" — you ask, AI answers. Most intuitive.<br>
+            <strong>Claude Code</strong> = "AI engineer" living in your terminal — runs coding tasks for you.<br>
+            <strong>Cowork</strong> = "AI assistant" that opens apps, clicks buttons, and tidies your computer so you don't have to.
+        </div>
+    </div>
+
+    <!-- Claude product line diagrams -->
+    <div class="term-diagrams" style="margin-bottom: 2rem;">
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude Product Line — Overview</h3>
+            <pre class="mermaid">flowchart TB
+    A[Anthropic] -->|provides| Claude[Claude LLM]
+    Claude -->|powers| CC[Claude.ai Chat\nWeb / App chat]
+    Claude -->|powers| CCode[Claude Code\nTerminal agent]
+    Claude -->|powers| CW[Cowork\nDesktop automation]
+    CC -->|you| User1[Converse / Ask questions]
+    CCode -->|autonomously| Dev[Read & write code / run commands]
+    CW -->|autonomously| Desktop[Operate desktop apps]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> All three products share the same Claude model underneath. The key difference is <em>who drives execution</em> — Chat is you asking and AI answering; Code and Cowork are AI agents proactively completing multi-step tasks.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude.ai Chat — Detail</h3>
+            <pre class="mermaid">flowchart LR
+    U[You] -->|Prompt| CC[Claude.ai Chat]
+    CC -->|uses| Model[Claude model]
+    CC --> F1[Text replies]
+    CC --> F2[Upload / analyse files]
+    CC --> F3[Generate code snippets]
+    CC --> F4[Web search - Pro]
+    MCP[MCP tools] -.->|connect| CC
+    Proj[Projects memory] -.->|persist| CC</pre>
+            <p class="diagram-caption"><strong>Note:</strong> The most accessible Claude interface. Supports uploading documents, code, and images. Pro plan includes web search. MCP enables external tool connections; Projects retains context across conversations.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude Code — Detail</h3>
+            <pre class="mermaid">flowchart TB
+    Dev[Developer] -->|natural language command| CCode[Claude Code\nCLI agent]
+    CCode --> Read[Read code / files]
+    CCode --> Write[Write / modify code]
+    CCode --> Run[Run commands / tests]
+    CCode --> Git[Git operations]
+    CCode --> MCP[Call MCP tools]
+    CCode -->|calls| API[Claude model API]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Claude Code runs in your terminal as a true AI agent — it actively reads, writes, and runs your code, executes shell commands, runs tests, and makes Git commits to complete full engineering tasks, rather than just offering suggestions.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Cowork — Detail</h3>
+            <pre class="mermaid">flowchart TB
+    U[Non-developer / General user] -->|describe task| CW[Cowork\nDesktop agent]
+    CW --> Files[Organise / move / rename files]
+    CW --> Apps[Operate desktop applications]
+    CW --> Tasks[Copy-paste data across apps]
+    CW --> Automate[Automate repetitive actions]
+    CW -->|uses| Model[Claude model]
+    CW --> MCP[MCP tool integration]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Cowork lets non-developers have an AI agent handle desktop tasks — e.g. sorting files by date, filling in spreadsheet data into a form. The AI handles the whole workflow.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Three Products Compared — Use Cases</h3>
+            <pre class="mermaid">flowchart LR
+    subgraph Casual["Everyday conversation → Claude.ai Chat"]
+        Q[You ask] --> A[AI answers]
+    end
+    subgraph Code["Engineering tasks → Claude Code"]
+        Task[You describe task] --> Agent1[AI completes multi-step engineering flow]
+    end
+    subgraph Desktop["Desktop automation → Cowork"]
+        Goal[You set a goal] --> Agent2[AI controls desktop apps autonomously]
+    end</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Daily Q&amp;A → Chat; coding tasks → Claude Code; computer operation automation → Cowork.</p>
+        </div>
+
+    </div>
+
+    <!-- ── LLM diagram ── -->
+    <div class="diagram-wrap">
+        <h3 style="text-align:center; color: var(--accent); font-size: 1rem; margin-bottom: 1rem;">What is an LLM?</h3>
+        <pre class="mermaid">
+flowchart LR
+    subgraph Def["Definition"]
+        LLM["LLM"]
+        EN["Large Language Model"]
+    end
+    LLM --> EN
+    subgraph Examples["Common examples"]
+        Claude["Claude"]
+        GPT["GPT"]
+        Gemini["Gemini"]
+    end
+    Def -.->|belong to this category| Examples
+        </pre>
+        <p class="diagram-caption"><strong>Diagram note:</strong> LLM stands for Large Language Model — an AI model trained on vast amounts of text to understand and generate human language. Claude, GPT, and Gemini are all LLMs.</p>
+    </div>
+
+    <!-- ── Full comparison table ── -->
+    <div class="brief-section">
+        <h2>AI Code Editors + Claude Product Line — Full Comparison</h2>
+        <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem;">Cursor and Antigravity are AI-powered code editors; Claude's three products span conversation, coding agent, and desktop automation. Use the table below to pick the right tool:</p>
+        <div style="overflow-x: auto;">
+        <table style="min-width: 700px;">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Cursor</th>
+                    <th>Antigravity</th>
+                    <th style="color: var(--claude);">Claude.ai Chat</th>
+                    <th style="color: var(--claude);">Claude Code</th>
+                    <th style="color: var(--claude);">Cowork</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Type</td>
+                    <td>AI code editor</td>
+                    <td>AI code editor</td>
+                    <td>Conversational interface</td>
+                    <td>Terminal AI agent</td>
+                    <td>Desktop AI agent</td>
+                </tr>
+                <tr>
+                    <td>Base / Platform</td>
+                    <td>Built on VS Code</td>
+                    <td>Google's own IDE</td>
+                    <td>Web / App</td>
+                    <td>Local terminal CLI</td>
+                    <td>Desktop application</td>
+                </tr>
+                <tr>
+                    <td>Highlights</td>
+                    <td>Chat + autocomplete, code edits, MCP support</td>
+                    <td>Multi-agent: autonomous planning, coding, testing, verification</td>
+                    <td>Text Q&amp;A, document analysis, Projects memory</td>
+                    <td>Autonomous code read/write, Shell &amp; Git execution</td>
+                    <td>Control desktop apps, organise files, cross-app automation</td>
+                </tr>
+                <tr>
+                    <td>How you use it</td>
+                    <td>Give a prompt; AI suggests or edits code</td>
+                    <td>Describe goal in natural language; agents execute in editor / terminal / browser</td>
+                    <td>You ask; AI answers</td>
+                    <td>Type task in terminal; AI agent completes it autonomously</td>
+                    <td>Describe goal; AI agent controls your computer</td>
+                </tr>
+                <tr>
+                    <td>Models</td>
+                    <td>Claude, Gemini, GPT, etc.</td>
+                    <td>Primarily Gemini; also Claude &amp; GPT</td>
+                    <td>Claude (Haiku / Sonnet / Opus)</td>
+                    <td>Claude (via API)</td>
+                    <td>Claude</td>
+                </tr>
+                <tr>
+                    <td>MCP support</td>
+                    <td>✅</td>
+                    <td>✅ (incl. MCP Store)</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Skill support</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Built-in image gen</td>
+                    <td>❌</td>
+                    <td>✅ (Imagen 3, etc.)</td>
+                    <td>❌ (can describe; no direct generation)</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Context window</td>
+                    <td>~200K tokens</td>
+                    <td>~1M tokens</td>
+                    <td>Up to ~200K tokens (plan-dependent)</td>
+                    <td>Depends on Claude model</td>
+                    <td>Depends on Claude model</td>
+                </tr>
+                <tr>
+                    <td>Made by</td>
+                    <td>Cursor Inc.</td>
+                    <td>Google</td>
+                    <td>Anthropic</td>
+                    <td>Anthropic</td>
+                    <td>Anthropic</td>
+                </tr>
+                <tr>
+                    <td>Best for</td>
+                    <td>Developers</td>
+                    <td>Developers</td>
+                    <td>Everyone</td>
+                    <td>Developers with terminal experience</td>
+                    <td>Non-developers; anyone automating daily computer tasks</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="capability">
+            <strong style="color: var(--claude);">Claude quick-reference:</strong><br>
+            <strong>Chat</strong> = Chat room — you ask, AI answers. Most intuitive. &nbsp;
+            <strong>Code</strong> = AI engineer living in your terminal, running tasks. &nbsp;
+            <strong>Cowork</strong> = AI assistant that opens apps and tidies your computer.<br><br>
+            <strong style="color: var(--accent);">Code editor comparison — image generation:</strong><br>
+            <strong>Cursor</strong> cannot generate image files directly; it can only write code or prompts to call an external image API.<br>
+            <strong>Antigravity can</strong> generate images directly inside the IDE: it has built-in models like Imagen 3 and Nano Banana Pro (Gemini 3 Pro Image). Describe what you need in natural language and images are generated and integrated into your project (UI mockups, illustrations, system diagrams, etc.).<br>
+            <strong>Games &amp; animation:</strong> Antigravity can have agents write game code and generate matching images, producing a playable game with UI / animated effects in minutes — ideal for MVPs and demos. Whether it can export animation video files directly depends on product updates.
+        </div>
+    </div>
+
+    <!-- ── Glossary ── -->
+    <div class="terms">
+        <h2>Glossary</h2>
+        <dl>
+            <dt>LLM</dt>
+            <dd>Stands for <em>Large Language Model</em> — an AI model trained on massive amounts of text to understand and generate human language. Claude, GPT, and Gemini are all LLMs.</dd>
+
+            <dt>Prompt</dt>
+            <dd>The instruction or question you type into an AI interface. Used in Cursor, Antigravity, ChatGPT, n8n AI nodes, and elsewhere. The AI generates a response or takes action based on your prompt.</dd>
+
+            <dt>Claude <span class="badge">Anthropic</span></dt>
+            <dd>The LLM developed by Anthropic, strong at conversation, analysis, writing, and coding. Available in multiple tiers (Haiku / Sonnet / Opus) and accessible via Claude.ai Chat, Claude Code, Cowork, Cursor, n8n, or the API.</dd>
+
+            <dt>Claude.ai Chat <span class="badge">Anthropic</span></dt>
+            <dd>Claude's official web and mobile chat interface (claude.ai). Available as Free, Pro, Team, and Enterprise plans. Supports uploading documents, images, and code; Pro includes web search. MCP lets you connect external tools; Projects lets the AI retain background context across conversations. <strong>Suitable for everyone — no technical background needed.</strong></dd>
+
+            <dt>Claude Code <span class="badge">Anthropic</span></dt>
+            <dd>Anthropic's terminal AI agent tool (CLI). After installation, type natural language in your local terminal and Claude Code autonomously reads and writes code, executes shell commands, runs tests, and performs Git operations to complete full engineering tasks. Key difference from Cursor: Cursor is an AI assistant <em>inside</em> an editor; Claude Code is an AI agent that <em>autonomously executes tasks</em> in the terminal. <strong>Best for developers comfortable with the terminal.</strong></dd>
+
+            <dt>Cowork <span class="badge">Anthropic</span></dt>
+            <dd>Anthropic's desktop AI agent app (Beta). Lets users without coding skills describe a goal in natural language, then have an AI agent operate desktop applications to complete it (organising files, filling forms, copying data across apps). <strong>Best for non-developers who want to automate everyday computer tasks.</strong></dd>
+
+            <dt>Claude model tiers</dt>
+            <dd>
+                <strong>Haiku</strong>: Lightest and fastest — great for simple Q&amp;A and high-frequency tasks.<br>
+                <strong>Sonnet</strong>: Balanced speed and capability — the workhorse for daily development and complex Q&amp;A.<br>
+                <strong>Opus</strong>: Most powerful — designed for highly complex reasoning, long document analysis, and research.
+            </dd>
+
+            <dt>Cursor</dt>
+            <dd>An AI code editor built on VS Code, with built-in chat, autocomplete, and code-editing features. Supports Claude, Gemini, and GPT as back-end models, plus MCP and Skill extensions.</dd>
+
+            <dt>VS Code</dt>
+            <dd>Microsoft's open-source code editor. Cursor is essentially VS Code with AI added on top — the look and feel are very similar.</dd>
+
+            <dt>Antigravity</dt>
+            <dd>Google's AI code editor. Primarily uses Gemini but also supports Claude and GPT. Multi-agent design lets agents autonomously plan, write, test, and verify code. Supports MCP and Skill extensions, and has built-in image generation (Imagen 3, etc.).</dd>
+
+            <dt>n8n</dt>
+            <dd>An open-source workflow automation tool (similar to Zapier or Make). You build flows by dragging and connecting nodes. Has built-in (or installable) AI nodes for OpenAI and Anthropic — send a prompt to Claude or GPT, then chain the result with Gmail, Slack, databases, APIs, and more.</dd>
+
+            <dt>Gemini</dt>
+            <dd>Google's AI model family with multimodal and reasoning capabilities. Available in Cursor, Google AI Studio, and other products.</dd>
+
+            <dt>GPT</dt>
+            <dd>OpenAI's language model series (e.g. GPT-4). Powers ChatGPT and is available via Cursor, n8n, or direct API integration into your own apps.</dd>
+
+            <dt>Anthropic</dt>
+            <dd>The company behind Claude. Like OpenAI and Google, Anthropic is an AI model provider. Its products include Claude.ai Chat, Claude Code, and Cowork; it also exposes the Claude API for third-party use.</dd>
+
+            <dt>OpenAI</dt>
+            <dd>The company behind GPT and ChatGPT. Provides an API used by Cursor, n8n, and custom-built services.</dd>
+
+            <dt>MCP (Model Context Protocol)</dt>
+            <dd>A protocol that lets AI assistants connect to external tools and data sources. <strong>Claude.ai Chat, Claude Code, Cursor, and Antigravity all support MCP</strong>. Install an MCP server and the AI can call databases, APIs, local scripts, and more. Antigravity also offers an MCP Store and pre-built Google Cloud integrations (BigQuery, AlloyDB, etc.). Relationship with Skill: MCP handles <em>where to connect</em> (the hands / tools); Skill handles <em>how to do it</em> (the workflow / method).</dd>
+
+            <dt>Skill</dt>
+            <dd><strong>Both Cursor and Antigravity support Skills.</strong> A Skill is a reusable instruction set or knowledge package that teaches an AI agent how to perform a specific task (e.g. deploy to staging, code review, write documentation). Stored as Markdown or directories (Cursor: <code>.cursor/skills/</code>, <code>.agents/skills/</code>; Antigravity: <code>.agent/skills/</code>, <code>~/.gemini/antigravity/skills/</code>). Can be triggered manually (e.g. <code>/skill-name</code>) or applied automatically by the agent based on task semantics. Complements MCP: Skill provides the <em>how</em> (workflow &amp; process); MCP provides the <em>where</em> (external connections &amp; tools).</dd>
+        </dl>
+
+        <!-- ── Per-term diagrams ── -->
+        <div class="term-diagrams">
+            <h2>Term Relationship Diagrams</h2>
+            <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem;">Visual supplements showing how each term relates to the broader ecosystem.</p>
+
+        <div class="term-diagram">
+            <h3>LLM</h3>
+            <pre class="mermaid">flowchart LR
+    LLM[LLM] --> A[Large Language Model]
+    C[Claude] & D[GPT] & E[Gemini] -.->|are| LLM</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Prompt</h3>
+            <pre class="mermaid">flowchart LR
+    U[You] -->|type| P[Prompt]
+    P --> CC[Claude.ai Chat]
+    P --> CCode[Claude Code]
+    P --> C[Cursor]
+    P --> A[Antigravity]
+    P --> G[ChatGPT]
+    P --> N[n8n]
+    CC & CCode & C & A & G & N -->|sent to| AI[AI model]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> A Prompt is the instruction you enter in any AI interface — it is forwarded to the underlying AI model for processing.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude (model)</h3>
+            <pre class="mermaid">flowchart LR
+    A[Anthropic] -->|develops| C[Claude LLM]
+    C --> U1[Claude.ai Chat]
+    C --> U2[Claude Code]
+    C --> U3[Cowork]
+    C --> U4[Cursor]
+    C --> U5[n8n]
+    C --> U6[Custom API apps]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Claude is the LLM developed by Anthropic and is accessible through many interfaces and tools.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude.ai Chat</h3>
+            <pre class="mermaid">flowchart LR
+    U[You] -->|Web / App chat| CC[Claude.ai Chat]
+    CC -->|uses| Claude[Claude model]
+    CC --> F1[Text Q&A]
+    CC --> F2[Document analysis]
+    CC --> F3[Code suggestions]
+    MCP[MCP] -.->|extend tools| CC
+    Proj[Projects] -.->|cross-chat memory| CC</pre>
+            <p class="diagram-caption"><strong>Note:</strong> The most intuitive way to use Claude — you ask and AI answers. Pro plan adds web search; MCP connects external tools; Projects preserves cross-conversation memory.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Claude Code</h3>
+            <pre class="mermaid">flowchart TB
+    Dev[Developer] -->|terminal command| CCode[Claude Code CLI]
+    CCode -->|autonomously| R[Read & write code]
+    CCode -->|autonomously| S[Shell commands]
+    CCode -->|autonomously| T[Tests / verification]
+    CCode -->|autonomously| G[Git operations]
+    CCode --> MCP[MCP tools]
+    CCode -->|calls| API[Claude API]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Claude Code is a terminal AI agent — it doesn't just give advice, it actively executes complete engineering workflows.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Cowork</h3>
+            <pre class="mermaid">flowchart TB
+    U[You] -->|describe goal| CW[Cowork desktop agent]
+    CW -->|autonomously| Files[Organise / move files]
+    CW -->|autonomously| Apps[Desktop applications]
+    CW -->|autonomously| Tasks[Cross-app data operations]
+    CW --> MCP[MCP tools]
+    CW -->|uses| Claude[Claude model]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Cowork lets an AI agent handle desktop tasks on your behalf — ideal for non-developers who want to automate everyday computer work.</p>
+        </div>
+
+        <div class="term-diagram claude-highlight">
+            <h3>Three Claude Products at a Glance</h3>
+            <pre class="mermaid">flowchart LR
+    subgraph Chat["Chat — you ask, AI answers"]
+        CC[Claude.ai Chat]
+        CC --> R1[Answer questions]
+    end
+    subgraph CLCode["Code — AI agent for coding"]
+        CCode[Claude Code]
+        CCode --> R2[Execute engineering tasks autonomously]
+    end
+    subgraph CW["Cowork — AI agent for desktop"]
+        Cw[Cowork]
+        Cw --> R3[Control desktop autonomously]
+    end
+    Claude[Claude LLM] --> CC
+    Claude --> CCode
+    Claude --> Cw</pre>
+            <p class="diagram-caption"><strong>Note:</strong> All three share the same Claude model but serve entirely different use cases — Chat for conversation, Code for agentic coding, Cowork for desktop automation.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Cursor</h3>
+            <pre class="mermaid">flowchart TB
+    V[VS Code] -->|base| C[Cursor]
+    C --> M1[Claude]
+    C --> M2[Gemini]
+    C --> M3[GPT]
+    MCP[MCP] -.->|extend| C
+    Skill[Skill] -.->|extend| C</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Cursor is built on VS Code and supports Claude / Gemini / GPT as back-ends, with MCP for external tool connections and Skill for agent workflows and domain knowledge.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Antigravity</h3>
+            <pre class="mermaid">flowchart TB
+    G[Google] -.->|created by| A[Antigravity]
+    A -->|primary| Gem[Gemini]
+    A --> Claude[Claude]
+    A --> GPT[GPT]
+    A -->|multi-agent| Agent[Autonomous plan / code / test]
+    MCP[MCP] -.->|extend| A
+    Skill[Skill] -.->|extend| A</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Antigravity is made by Google, primarily uses Gemini but also supports Claude and GPT. Supports MCP and Skill; includes built-in image generation and multi-agent autonomous execution.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Cursor vs Antigravity — Side by Side</h3>
+            <pre class="mermaid">flowchart TB
+    subgraph Common["Shared features"]
+        P[Prompt]
+        M[Claude / Gemini / GPT]
+        MCP[MCP extension]
+        Skill[Skill extension]
+    end
+    subgraph Cur["Cursor"]
+        V[VS Code base]
+        NoImg[No built-in image gen]
+    end
+    subgraph Anti["Antigravity"]
+        GG[Made by Google]
+        Img[Built-in image gen]
+        Agent[Multi-agent]
+    end
+    P --> Cur
+    P --> Anti
+    Cur --> M
+    Anti --> M
+    MCP --> Cur
+    MCP --> Anti
+    Skill --> Cur
+    Skill --> Anti</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Both are AI code editors that accept Prompts and support Claude / Gemini / GPT, MCP, and Skill. Differences: Cursor is VS Code-based with no built-in image generation; Antigravity is Google's own IDE with built-in image gen and multi-agent execution.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Skill</h3>
+            <pre class="mermaid">flowchart TB
+    subgraph Use["Products that support Skill"]
+        Cursor[Cursor]
+        Anti[Antigravity]
+    end
+    Skill[Skill] -.->|extend workflows & methods| Cursor
+    Skill -.->|extend workflows & methods| Anti
+    subgraph Content["Skill content"]
+        How[How-to / workflow]
+        Know[Domain knowledge]
+    end
+    Skill --> How
+    Skill --> Know
+    MCP[MCP] -.->|connections / tools| Cursor
+    MCP -.->|connections / tools| Anti</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Both Cursor and Antigravity support Skill. Skills provide the <em>how</em> (workflows, domain knowledge); MCP provides the <em>where</em> (databases, APIs, scripts). The two are complementary.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>ChatGPT</h3>
+            <pre class="mermaid">flowchart LR
+    U[User] -->|web chat| ChatGPT[ChatGPT]
+    ChatGPT -->|uses| GPT[GPT]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> ChatGPT is OpenAI's web interface, powered by GPT. Does not support MCP.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>VS Code</h3>
+            <pre class="mermaid">flowchart LR
+    VS[VS Code\ncode editor] -->|add AI integration| Cursor[Cursor]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>n8n</h3>
+            <pre class="mermaid">flowchart LR
+    T[Trigger] --> N[n8n workflow]
+    N --> AI[AI node\nClaude / GPT]
+    N --> S[Gmail / Slack / API / DB]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Gemini</h3>
+            <pre class="mermaid">flowchart LR
+    G[Google] -->|develops| Gem[Gemini]
+    Gem --> U1[Cursor]
+    Gem --> U2[Google AI Studio]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>GPT</h3>
+            <pre class="mermaid">flowchart LR
+    O[OpenAI] -->|develops| GPT[GPT]
+    GPT --> U1[ChatGPT]
+    GPT --> U2[Cursor]
+    GPT --> U3[n8n / API]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>Anthropic</h3>
+            <pre class="mermaid">flowchart LR
+    A[Anthropic] -->|provides| Claude[Claude LLM]
+    A -->|ships| CC[Claude.ai Chat]
+    A -->|ships| CCode[Claude Code]
+    A -->|ships| CW[Cowork]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>OpenAI</h3>
+            <pre class="mermaid">flowchart LR
+    O[OpenAI] -->|provides| GPT[GPT]
+    O -->|provides| ChatGPT[ChatGPT]
+    O -->|provides| API[API]</pre>
+        </div>
+
+        <div class="term-diagram">
+            <h3>MCP vs Skill — Relationship</h3>
+            <pre class="mermaid">flowchart LR
+    subgraph IDE["AI interfaces"]
+        Cursor[Cursor]
+        Anti[Antigravity]
+        CCChat[Claude.ai Chat]
+        CCCode[Claude Code]
+    end
+    MCP[MCP] -->|where to connect| Tool[DB / API / scripts]
+    Skill[Skill] -->|how to do it| Flow[Workflow / method / knowledge]
+    MCP -.-> Cursor
+    MCP -.-> Anti
+    MCP -.-> CCChat
+    MCP -.-> CCCode
+    Skill -.-> Cursor
+    Skill -.-> Anti</pre>
+            <p class="diagram-caption"><strong>Note:</strong> MCP handles "connecting to external systems" (the hands / tools); Skill teaches the agent "how to execute a task" (the method). Cursor and Antigravity support both; Claude.ai Chat and Claude Code support MCP.</p>
+        </div>
+
+        <div class="term-diagram">
+            <h3>MCP (Model Context Protocol)</h3>
+            <pre class="mermaid">flowchart LR
+    Cursor[Cursor] <-->|MCP| M[MCP server]
+    Anti[Antigravity] <-->|MCP| M
+    CCChat[Claude.ai Chat] <-->|MCP| M
+    CCCode[Claude Code] <-->|MCP| M
+    M <--> DB[Database]
+    M <--> API[API]
+    M <--> Script[Local scripts]</pre>
+            <p class="diagram-caption"><strong>Note:</strong> Cursor, Antigravity, Claude.ai Chat, and Claude Code all support MCP. Via an MCP server the AI can reach databases, APIs, local scripts, and other external resources.</p>
+        </div>
+        </div>
+    </div>
+
+    <div class="terms">
+        <div class="claude-note">
+            <strong>Claude product line — summary:</strong><br>
+            <strong>Claude.ai Chat</strong> (Web / App) → You ask, AI answers. Simplest option; suitable for everyone.<br>
+            <strong>Claude Code</strong> (Terminal CLI) → AI agent autonomously completes multi-step engineering tasks. For developers.<br>
+            <strong>Cowork</strong> (Desktop app) → AI agent controls your desktop. For non-developers who want to automate daily computer tasks.<br>
+            All three share the Claude model underneath and all support MCP for external tool connections.
+        </div>
+        <div class="note">
+            <strong>Relationship summary:</strong> You use a <strong>Prompt</strong> in <strong>Claude.ai Chat</strong>, <strong>Claude Code</strong>, <strong>Cowork</strong>, <strong>Cursor</strong>, <strong>Antigravity</strong>, <strong>ChatGPT</strong>, or <strong>n8n</strong> → each interface forwards your prompt to <strong>Claude</strong>, <strong>Gemini</strong>, or <strong>GPT</strong>. <strong>Cursor</strong> and <strong>Antigravity</strong> both support <strong>MCP</strong> (external tool connections) and <strong>Skill</strong> (agent workflows and domain knowledge); <strong>Claude.ai Chat</strong> and <strong>Claude Code</strong> also support MCP. <strong>n8n</strong> chains AI with other services into automated workflows. <strong>VS Code</strong> is the base editor Cursor is built on.
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
