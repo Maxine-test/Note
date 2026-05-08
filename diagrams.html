@@ -114,7 +114,7 @@
         }
         .brief-section h2 { color: var(--accent); font-size: 1.1rem; margin: 0 0 1rem 0; }
         .brief-section.claude-section h2 { color: var(--claude); }
-        .brief-section table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .brief-section table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 0.9rem; }
         .brief-section th, .brief-section td { border: 1px solid rgba(0,0,0,0.12); padding: 0.5rem 0.75rem; text-align: left; }
         .brief-section th { color: var(--accent); background: rgba(0,0,0,0.05); }
         .brief-section.claude-section th { color: var(--claude); }
@@ -233,7 +233,8 @@ flowchart TB
     <div class="brief-section claude-section">
         <h2>Claude.ai Chat · Claude Code · Cowork 差異</h2>
         <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem;">三者都由 Anthropic 提供，底層都是 Claude 模型，但使用方式與自動化程度完全不同：</p>
-        <table>
+        <div style="overflow-x: auto;">
+        <table style="min-width: 520px;">
             <thead>
                 <tr><th>項目</th><th>Claude.ai Chat</th><th>Claude Code</th><th>Cowork</th></tr>
             </thead>
@@ -247,6 +248,7 @@ flowchart TB
                 <tr><td>費用</td><td>免費版 + Pro/Team/Enterprise</td><td>按使用量計費（Claude API）</td><td>Beta 功能，詳見官網</td></tr>
             </tbody>
         </table>
+        </div>
         <div class="capability">
             <strong style="color: var(--claude);">簡單記憶法：</strong><br>
             <strong>Claude.ai Chat</strong> = 「聊天室」，你問 AI 答，最直覺。<br>
